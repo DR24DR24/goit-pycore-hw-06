@@ -1,9 +1,11 @@
 
 from collections import UserDict
-#import exception
 
 class PhoneError(Exception):
        pass
+
+
+
 
 class Field:
     def __init__(self, value):
@@ -12,13 +14,19 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
+
 class Name(Field):
     # реалізація класу
 		pass
 
+
+
 class Phone(Field):
     # реалізація класу
 		pass
+
+
 
 class Record:
     def __init__(self, name):
@@ -34,20 +42,24 @@ class Record:
         if len(new_phone)!=10 or not new_phone.isdigit():
                raise PhoneError
         try:
-            self.phones.remove(old_phone)
-            self.add_phone(new_phone)
+            fo=self.find_phone(old_phone)
+            if fo==None:
+                raise ValueError
+            fo.value=new_phone
         except ValueError:
             print("No such number")
         except PhoneError:
             print("incorrect phone number")
-
-    
-          
-
-
+        
+    def find_phone(self,phone):
+        phone_objects=[x for x in self.phones if x.value==phone]
+        return phone_objects[0] if len(phone_objects)>0 else None
 
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+
+
+
 
 class AddressBook(UserDict):
     # реалізація класу
@@ -55,18 +67,15 @@ class AddressBook(UserDict):
         self.data = {}
     
     def add_record(self,record:Record):
-        self.data[record.name.value]=john_record
+        self.data[record.name.value]=record
         
     def find(self,user_name):
         return self.data[user_name]
-        # records=[x for x in self.data if x.name==user_name]
-        # return records[0] if len(records)>0 else None
     
     def delete(self,user_name):
-        #record=self.find(user_name)
         try:
-            self.data.remove(record)
-        except ValueError:
+            del self.data[user_name]
+        except KeyError:
             print("no such user")
 		
 
@@ -107,4 +116,8 @@ print(f"{john.name}: {found_phone}")  # Виведення: 5555555555
 
     # Видалення запису Jane
 book.delete("Jane")
+
+    # Виведення всіх записів у книзі
+for name, record in book.data.items():
+    print(record)
 
