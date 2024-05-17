@@ -54,6 +54,14 @@ class Record:
     def find_phone(self,phone):
         phone_objects=[x for x in self.phones if x.value==phone]
         return phone_objects[0] if len(phone_objects)>0 else None
+    
+    def remove_phone(self,phone):
+        p=self.find_phone(phone)
+        if p:
+            self.phones.remove(p)
+            print("remove phone number")
+        else:
+            print("No such number")
 
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
@@ -106,7 +114,8 @@ print(list(book.keys()))
     # Знаходження та редагування телефону для John
 john = book.find("John")
 john.edit_phone("1234567890", "1112223333")
-
+john.remove_phone("1234567890")
+john.remove_phone("1112223333")
 
 print(john)  # Виведення: Contact name: John, phones: 1112223333; 5555555555
 
